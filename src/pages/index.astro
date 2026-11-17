@@ -1,0 +1,101 @@
+---
+import Base from "../layouts/Base.astro";
+import { getContent, slugify, safe } from "../lib/data.js";
+
+const c = await getContent();
+const p = c.profile;
+const tags = (s) => String(s || "").split(",").map((t) => t.trim()).filter(Boolean);
+const emo = ["🚀", "🎨", "⚡", "🧩", "🌈", "🔥"];
+const top = c.projects.slice(0, 3);
+---
+<Base>
+  <main>
+    <section id="hero">
+      <canvas id="cv" aria-hidden="true"></canvas>
+      <div class="wrap hero-in">
+        {p.available && <div class="av"><i></i>{p.available}</div>}
+        <span class="hi">👋 Halo, saya</span>
+        <h1>{[...p.name].map((ch) => <span>{ch === " " ? "\u00a0" : ch}</span>)}</h1>
+        <div class="role"><b id="ty" data-t={p.role}>{p.role}</b></div>
+        <p class="bio">{p.bio}</p>
+        <a class="btn mag" href="/projects">Lihat proyek</a>
+        <a class="btn alt mag" href="#kontak">Hubungi saya</a>
+        {safe(p.cv) && <a class="btn teal mag" href={safe(p.cv)} target="_blank" rel="noopener">Unduh CV</a>}
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="wrap about">
+        <div class="rv"><div class="blob">{p.photo ? <img src={p.photo} alt={`Foto ${p.name}`} loading="lazy" /> : "🧑‍💻"}</div></div>
+        <div class="rv">
+          <h2 class="title">Tentang saya</h2>
+          <p>{p.about}</p>
+          {c.skillGroups.map((g) => (
+            <div class="sg"><b>{g.name}</b>
+              <div class="chips">{tags(g.items).map((t) => <span class="chip">{t}</span>)}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {c.experience?.length > 0 && (
+      <section id="pengalaman">
+        <div class="wrap">
+          <h2 class="title rv">Pengalaman</h2>
+          <div class="tl">
+            {c.experience.map((x) => (
+              <div class="card rv"><small>{x.period}</small><h3>{x.role}</h3><p><b>{x.org}</b></p><p>{x.desc}</p></div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <section id="proyek">
+      <div class="wrap">
+        <h2 class="title rv">Proyek</h2>
+        <div class="grid">
+          {top.map((x, i) => (
+            <a class="card tilt rv zoom" href={`/projects/${x.slug || slugify(x.title)}`}>
+              <div class="thumb">{x.images?.[0] ? <img src={x.images[0]} alt={x.title} loading="lazy" /> : emo[i % 6]}</div>
+              <div class="b"><h3>{x.title}</h3><p>{x.desc}</p>
+                {tags(x.tags).map((t) => <span class="tag">{t}</span>)}
+                <div class="more">Lihat detail</div>
+              </div>
+            </a>
+          ))}
+        </div>
+        {c.projects.length > 3 && <a class="btn alt" href="/projects">Semua proyek ({c.projects.length})</a>}
+      </div>
+    </section>
+
+    <section id="sertifikat">
+      <div class="wrap">
+        <h2 class="title rv">Sertifikat &amp; galeri</h2>
+        <div class="car rv">
+          <button class="arr l" aria-label="Sebelumnya" type="button">‹</button>
+          <div class="track" id="tr">
+            {c.certs.map((x) => (
+              <button class="card slide" type="button" data-lb="certs" data-src={x.img || ""} data-title={x.title} data-sub={x.issuer} aria-label={`Perbesar ${x.title}`}>
+                <div class="thumb">{x.img ? <img src={x.img} alt={x.title} loading="lazy" /> : "🏆"}</div>
+                <div class="b"><h3>{x.title}</h3><p>{x.issuer}</p></div>
+              </button>
+            ))}
+          </div>
+          <button class="arr r" aria-label="Berikutnya" type="button">›</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="kontak">
+      <div class="wrap rv" style="text-align:center">
+        <h2 class="title">Ayo ngobrol</h2>
+        <p style="font-size:20px">Punya proyek atau sekadar ingin menyapa?</p>
+        <a class="btn mag" href={`mailto:${p.email}`}>{p.email}</a>
+        {safe(p.github) && <a class="btn alt mag" href={safe(p.github)} target="_blank" rel="noopener">GitHub</a>}
+        {safe(p.linkedin) && <a class="btn vio mag" href={safe(p.linkedin)} target="_blank" rel="noopener">LinkedIn</a>}
+      </div>
+    </section>
+  </main>
+</Base>

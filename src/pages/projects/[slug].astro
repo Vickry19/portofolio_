@@ -1,0 +1,47 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getContent, slugify, safe } from "../../lib/data.js";
+
+export async function getStaticPaths() {
+  const c = await getContent();
+  return c.projects.map((p, i) => ({ params: { slug: p.slug || slugify(p.title) }, props: { i } }));
+}
+
+const { i } = Astro.props;
+const c = await getContent();
+const x = c.projects[i];
+const n = c.projects.length;
+const prev = c.projects[(i - 1 + n) % n];
+const next = c.projects[(i + 1) % n];
+const imgs = x.images || [];
+const tags = String(x.tags || "").split(",").map((t) => t.trim()).filter(Boolean);
+const link = (p) => `/projects/${p.slug || slugify(p.title)}`;
+---
+<Base title={`${x.title} — ${c.profile.name}`} desc={x.desc} image={imgs[0]}>
+  <main class="page wrap" style="padding-left:6vw;padding-right:6vw;padding-bottom:80px">
+    <a href="/projects">‹ Semua proyek</a>
+    <h1 class="title in" style="display:block;margin:16px 0 12px;font-size:clamp(36px,7vw,72px)">{x.title}</h1>
+    <p style="font-size:20px">{x.desc}</p>
+    <div>{tags.map((t) => <span class="tag">{t}</span>)}</div>
+    {imgs.length > 0 && (
+      <div class="gal">
+        {imgs.map((u, k) => (
+          <button type="button" data-lb="gal" data-src={u} data-title={x.title} data-sub={`Gambar ${k + 1} dari ${imgs.length}`} aria-label={`Perbesar gambar ${k + 1}`}>
+            <img src={u} alt={`${x.title}, gambar ${k + 1}`} loading="lazy" />
+          </button>
+        ))}
+      </div>
+    )}
+    {x.detail && <p class="detail">{x.detail}</p>}
+    <div>
+      {safe(x.url) && <a class="btn" href={safe(x.url)} target="_blank" rel="noopener">Buka demo</a>}
+      {safe(x.repo) && <a class="btn alt" href={safe(x.repo)} target="_blank" rel="noopener">Lihat kode di GitHub</a>}
+    </div>
+    {n > 1 && (
+      <div class="pn">
+        <a class="btn sm" href={link(prev)}>‹ {prev.title}</a>
+        <a class="btn sm" href={link(next)}>{next.title} ›</a>
+      </div>
+    )}
+  </main>
+</Base>

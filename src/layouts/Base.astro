@@ -1,0 +1,72 @@
+---
+import "../styles/global.css";
+import { getContent, safe } from "../lib/data.js";
+
+const { title, desc, image, bare = false, noindex = false } = Astro.props;
+const c = await getContent();
+const p = c.profile;
+const t = title || p.siteTitle || `${p.name} — ${p.role}`;
+const d = desc || p.siteDesc || p.bio;
+const img = image || p.ogImage || p.photo || "";
+const canon = new URL(Astro.url.pathname, Astro.site);
+const h = Astro.url.pathname === "/" ? "" : "/";
+---
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{t}</title>
+  <meta name="description" content={d} />
+  <link rel="canonical" href={canon} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  {noindex && <meta name="robots" content="noindex,nofollow" />}
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={t} />
+  <meta property="og:description" content={d} />
+  {img && <meta property="og:image" content={img} />}
+  <meta name="twitter:card" content={img ? "summary_large_image" : "summary"} />
+  <script is:inline>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+  {!bare && (
+    <>
+      <div id="bar"></div>
+      <div id="cur"></div>
+      <div class="wipe" id="wipe"><i></i><i></i><i></i><i></i></div>
+      <nav>
+        <a class="brand" href="/">{"{ "}{p.name.split(" ")[0]}{" }"}</a>
+        <button id="mb" aria-label="Buka menu" type="button">☰</button>
+        <div class="nl">
+          <a href="/">Beranda</a>
+          <a href={`${h}#about`}>Tentang</a>
+          <a href="/projects">Proyek</a>
+          <a href={`${h}#sertifikat`}>Sertifikat</a>
+          <a href={`${h}#kontak`}>Kontak</a>
+          <button id="tg" type="button" aria-label="Ganti mode terang atau gelap">◐ Tema</button>
+        </div>
+      </nav>
+    </>
+  )}
+  <slot />
+  {!bare && (
+    <footer>
+      <div class="fs">
+        <a class="fb" href="/">{p.name}.</a>
+        <div class="fl">
+          <a href="/projects">Proyek</a>
+          <a href={`${h}#sertifikat`}>Sertifikat</a>
+          <a href={`${h}#kontak`}>Kontak</a>
+          {safe(p.cv) && <a href={safe(p.cv)} target="_blank" rel="noopener">CV</a>}
+          {safe(p.github) && <a href={safe(p.github)} target="_blank" rel="noopener">GitHub</a>}
+          {safe(p.linkedin) && <a href={safe(p.linkedin)} target="_blank" rel="noopener">LinkedIn</a>}
+        </div>
+      </div>
+      <div class="fc">© {new Date().getFullYear()} {p.name}</div>
+    </footer>
+  )}
+  <div id="lb"></div>
+  <div id="toast"></div>
+  {!bare && <script>import "../scripts/fx.js";</script>}
+</body>
+</html>

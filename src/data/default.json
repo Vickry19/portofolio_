@@ -1,0 +1,36 @@
+{
+  "profile": {
+    "name": "Nama Kamu",
+    "role": "Full-Stack Developer",
+    "available": "Tersedia untuk Magang & Freelance",
+    "bio": "Saya membangun produk web yang cepat, rapi, dan menyenangkan dipakai.",
+    "about": "Halo! Saya developer yang suka mengubah ide menjadi aplikasi nyata. Saya senang belajar teknologi baru, berbagi ilmu, dan mengerjakan proyek yang berdampak.",
+    "email": "halo@contoh.id",
+    "github": "https://github.com/",
+    "linkedin": "https://linkedin.com/",
+    "photo": "",
+    "cv": "",
+    "ogImage": "",
+    "siteTitle": "",
+    "siteDesc": ""
+  },
+  "skillGroups": [
+    { "name": "Frontend", "items": "JavaScript, TypeScript, React" },
+    { "name": "Backend", "items": "Node.js, Python, PostgreSQL" },
+    { "name": "Tools", "items": "Docker, Git, Figma" }
+  ],
+  "experience": [
+    { "role": "Frontend Intern", "org": "PT Contoh Digital", "period": "2025", "desc": "Membangun komponen antarmuka dan memperbaiki performa halaman utama." }
+  ],
+  "projects": [
+    { "slug": "toko-online", "title": "Aplikasi Toko Online", "desc": "E-commerce lengkap dengan keranjang, pembayaran, dan dashboard penjual.", "detail": "Masalah: penjual kecil butuh toko sendiri tanpa biaya platform besar.\nPeran: merancang dan membangun frontend serta API.\nHasil: waktu checkout turun 40%.", "tags": "React, Node.js, MySQL", "url": "", "repo": "", "images": [] },
+    { "slug": "dashboard-analitik", "title": "Dashboard Analitik", "desc": "Visualisasi data real-time dengan grafik interaktif.", "detail": "", "tags": "Vue, Chart.js", "url": "", "repo": "", "images": [] },
+    { "slug": "catatan-pintar", "title": "Aplikasi Catatan Pintar", "desc": "Catatan kolaboratif dengan sinkronisasi antar perangkat.", "detail": "", "tags": "Flutter, Firebase", "url": "", "repo": "", "images": [] }
+  ],
+  "certs": [
+    { "title": "Web Development Bootcamp", "issuer": "Dicoding", "img": "" },
+    { "title": "Cloud Practitioner", "issuer": "AWS", "img": "" },
+    { "title": "React Advanced", "issuer": "Meta", "img": "" },
+    { "title": "Juara 2 Hackathon", "issuer": "Kampus Merdeka", "img": "" }
+  ]
+}

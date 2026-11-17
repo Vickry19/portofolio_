@@ -1,0 +1,25 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getContent, slugify } from "../../lib/data.js";
+
+const c = await getContent();
+const tags = (s) => String(s || "").split(",").map((t) => t.trim()).filter(Boolean);
+const emo = ["🚀", "🎨", "⚡", "🧩", "🌈", "🔥"];
+---
+<Base title={`Proyek — ${c.profile.name}`} desc={`Semua proyek ${c.profile.name}.`}>
+  <main class="page wrap" style="padding-left:6vw;padding-right:6vw;padding-bottom:80px">
+    <h1 class="title in" style="font-size:clamp(40px,8vw,80px)">Semua proyek</h1>
+    {c.projects.length === 0 && <p>Belum ada proyek. Tambahkan lewat halaman admin.</p>}
+    <div class="grid">
+      {c.projects.map((x, i) => (
+        <a class="card tilt" href={`/projects/${x.slug || slugify(x.title)}`}>
+          <div class="thumb">{x.images?.[0] ? <img src={x.images[0]} alt={x.title} loading="lazy" /> : emo[i % 6]}</div>
+          <div class="b"><h3>{x.title}</h3><p>{x.desc}</p>
+            {tags(x.tags).map((t) => <span class="tag">{t}</span>)}
+            <div class="more">Lihat detail</div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </main>
+</Base>
